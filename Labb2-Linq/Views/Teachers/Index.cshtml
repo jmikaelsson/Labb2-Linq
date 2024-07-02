@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Labb2_Linq.Models.Teacher>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div id="accordion">
+    @foreach (var item in Model)
+    {
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <a asp-action="Details" asp-route-id="@item.TeacherId">@Html.DisplayFor(modelItem => item.TeacherFirstName) @Html.DisplayFor(modelItem => item.TeacherLastName)</a>
+                    </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                @Html.Partial("_Details", Model)
+            </div>
+        </div>
+    </div>
+    }
+</div>
