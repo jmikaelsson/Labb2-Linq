@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb2_Linq.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240702110015_DbInit")]
-    partial class DbInit
+    [Migration("20240708113225_edit")]
+    partial class edit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace Labb2_Linq.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
 
-                    b.Property<int>("FkClassId")
+                    b.Property<int>("ClassId")
                         .HasColumnType("int");
 
                     b.Property<string>("StudentFirstName")
@@ -83,22 +83,22 @@ namespace Labb2_Linq.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.HasIndex("FkClassId");
+                    b.HasIndex("ClassId");
 
                     b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Labb2_Linq.Models.StudentCourse", b =>
                 {
-                    b.Property<int>("FkStudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FkCourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.HasKey("FkStudentId", "FkCourseId");
+                    b.HasKey("StudentId", "CourseId");
 
-                    b.HasIndex("FkCourseId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("StudentCourses");
                 });
@@ -128,18 +128,15 @@ namespace Labb2_Linq.Migrations
 
             modelBuilder.Entity("Labb2_Linq.Models.TeacherCourse", b =>
                 {
-                    b.Property<int>("FkTeacherId")
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FkCourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasKey("TeacherId", "CourseId");
 
-                    b.HasKey("FkTeacherId", "FkCourseId");
-
-                    b.HasIndex("FkCourseId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("TeacherCourses");
                 });
@@ -148,7 +145,7 @@ namespace Labb2_Linq.Migrations
                 {
                     b.HasOne("Labb2_Linq.Models.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("FkClassId")
+                        .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -159,13 +156,13 @@ namespace Labb2_Linq.Migrations
                 {
                     b.HasOne("Labb2_Linq.Models.Course", "Course")
                         .WithMany("StudentCourses")
-                        .HasForeignKey("FkCourseId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Labb2_Linq.Models.Student", "Student")
                         .WithMany("StudentCourses")
-                        .HasForeignKey("FkStudentId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -178,13 +175,13 @@ namespace Labb2_Linq.Migrations
                 {
                     b.HasOne("Labb2_Linq.Models.Course", "Course")
                         .WithMany("TeacherCourses")
-                        .HasForeignKey("FkCourseId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Labb2_Linq.Models.Teacher", "Teacher")
                         .WithMany("TeacherCourses")
-                        .HasForeignKey("FkTeacherId")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

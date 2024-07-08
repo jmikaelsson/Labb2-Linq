@@ -15,8 +15,8 @@ namespace Labb2_Linq.Models
         [Display(Name = "Efternamn")]
         public string StudentLastName { get; set; }
 
-        [ForeignKey("Class")]
-        public int FkClassId { get; set; }
+        
+        public int ClassId { get; set; }
         public Class Class { get; set; }
 
         public ICollection<StudentCourse> StudentCourses { get; set; }

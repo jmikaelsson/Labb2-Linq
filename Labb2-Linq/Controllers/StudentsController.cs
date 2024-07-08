@@ -20,46 +20,28 @@ namespace Labb2_Linq.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+      public async Task<IActionResult> Index(int? classId)
         {
-            var students = await _context.Students
-                .Include(s => s.Class)
-                            .ToListAsync();
+            var students = from s in _context.Students
+                           select s;
 
-            return View(students);
-        }
-
-        // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            if (classId.HasValue)
             {
-                return NotFound();
+                students = students.Where(s => s.ClassId == classId.Value);
             }
 
-            var student = await _context.Students
-                .Include(s => s.Class)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
+            var classes = await _context.Classes.ToListAsync();
+            ViewBag.Classes = classes;
+            ViewBag.SelectedClassId = classId;
 
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return View(student);
+            return View(await students.Include(s => s.Class).Include(s => s.StudentCourses).ThenInclude(sc => sc.Course).ThenInclude(c => c.TeacherCourses).ThenInclude(tc => tc.Teacher).ToListAsync());
         }
 
-        // GET: Students/Create
-        public IActionResult Create()
-        {
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "ClassName");
-            return View();
-        }
 
         // POST: Students/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,StudentFirstName,StudentLastName,FkClassId,TeacherId")] Student student)
+        public async Task<IActionResult> Create([Bind("StudentId,StudentFirstName,StudentLastName,ClassId,TeacherId")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +50,7 @@ namespace Labb2_Linq.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.FkClassId);
+            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.ClassId);
             return View(student);
         }
 
@@ -80,14 +62,17 @@ namespace Labb2_Linq.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            var student = await _context.Students
+                .Include(s => s.Class)
+                .FirstOrDefaultAsync();
+                
 
             if (student == null)
             {
                 return NotFound();
             }
 
-            ViewData["id"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.FkClassId);
+            ViewData["id"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.ClassId);
 
             return View(student);
         }
@@ -96,7 +81,7 @@ namespace Labb2_Linq.Controllers
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentFirstName,StudentLastName,FkClassId")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentFirstName,StudentLastName,ClassId")] Student student)
         {
             if (id != student.StudentId)
             {
@@ -125,7 +110,7 @@ namespace Labb2_Linq.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["id"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.FkClassId);
+            ViewData["id"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.ClassId);
             return View(student);
         }
 

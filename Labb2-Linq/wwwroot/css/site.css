@@ -18,5 +18,123 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+
+h1{
+    font-size: 58px;
+}
+p{
+    font-size: 20px;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+header {
+    padding: 8px;
+    background-color: #b5b5b552;
+    box-shadow: 0 8px 12px 4px #fff;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content {
+    display: flex;
+    flex-grow: 1;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #fff;
+    padding: 1rem;
+    padding-top: 3rem;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+
+.sidebar-logo {
+    margin-bottom: 2rem; /* Utökad luft under logotypen */
+    max-height: 30%;
+}
+
+.sidebar ul {
+    list-style-type: none; /* Ta bort punktlistan från länkarna */
+    padding: 0;
+}
+
+    .sidebar ul li {
+        margin-bottom: 10px; /* Ökade avståndet mellan länkarna */
+    }
+
+        .sidebar ul li a {
+            color: #000000b2;
+            padding: 2px;
+            margin: 8px;
+            text-decoration: none;
+            font-size: 20px;
+            position: relative;
+            display: inline-block; /* Gör länken till en block-element */
+            transition: color 0.3s ease; /* Övergång för färgförändring */
+        }
+
+            .sidebar ul li a::after {
+                content: "";
+                position: absolute;
+                bottom: -2px; /* Placera linjen precis under texten */
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: currentColor;
+                transform: scaleX(0); /* Skala linjen till noll i början */
+                transform-origin: left;
+                transition: transform 450ms ease-in-out; /* Övergång för transformering */
+            }
+
+            .sidebar ul li a:hover::after {
+                transform: scaleX(1); /* Skala linjen till full bredd på hover */
+                height: 2px;
+            }
+
+            .sidebar ul li a:hover {
+                color: #000; /* Färgförändring vid hover */
+            }
+
+
+.main-content {
+    width: 80%;
+    padding: 3rem;
+}
+/*Media query för att begränsa sidbarens storlek till 250px om skärmbredden är mer än 1400px */
+@media only screen and (min-width: 1400px) {
+    .sidebar {
+        max-width: 250px;
+    }
+}
+/* Stilar för hamburgemeny */
+.navbar-toggler {
+    border: none; /* Ta bort gränser */
+}
+
+    .navbar-toggler:focus {
+        outline: none; /* Ta bort fokusramen */
+    }
+
+.navbar-nav .nav-link {
+    color: #333; /* Ändra färgen på länkarna */
 }

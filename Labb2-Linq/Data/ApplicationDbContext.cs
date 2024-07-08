@@ -13,30 +13,9 @@ namespace Labb2_Linq.Data
         {
             // Composite keys for many-to-many relationships
             modelBuilder.Entity<StudentCourse>()
-                .HasKey(sc => new { sc.FkStudentId, sc.FkCourseId });
-
-            modelBuilder.Entity<StudentCourse>()
-                .HasOne(sc => sc.Student)
-                .WithMany(s => s.StudentCourses)
-                .HasForeignKey(sc => sc.FkStudentId);
-
-            modelBuilder.Entity<StudentCourse>()
-                .HasOne(sc => sc.Course)
-                .WithMany(c => c.StudentCourses)
-                .HasForeignKey(sc => sc.FkCourseId);
-
+                .HasKey(sc => new { sc.StudentId, sc.CourseId });
             modelBuilder.Entity<TeacherCourse>()
-                .HasKey(tc => new { tc.FkTeacherId, tc.FkCourseId });
-
-            modelBuilder.Entity<TeacherCourse>()
-                .HasOne(tc => tc.Teacher)
-                .WithMany(t => t.TeacherCourses)
-                .HasForeignKey(tc => tc.FkTeacherId);
-
-            modelBuilder.Entity<TeacherCourse>()
-                .HasOne(tc => tc.Course)
-                .WithMany(c => c.TeacherCourses)
-                .HasForeignKey(tc => tc.FkCourseId);
+                .HasKey(tc => new { tc.TeacherId, tc.CourseId });
 
             // This line is used if using identity and if having an overridden OnModelCreating
             // base.OnModelCreating(modelBuilder);

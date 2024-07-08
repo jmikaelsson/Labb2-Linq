@@ -5,7 +5,7 @@
 namespace Labb2_Linq.Migrations
 {
     /// <inheritdoc />
-    public partial class DbInit : Migration
+    public partial class edit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,14 +58,14 @@ namespace Labb2_Linq.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentFirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     StudentLastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    FkClassId = table.Column<int>(type: "int", nullable: false)
+                    ClassId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.StudentId);
                     table.ForeignKey(
-                        name: "FK_Students_Classes_FkClassId",
-                        column: x => x.FkClassId,
+                        name: "FK_Students_Classes_ClassId",
+                        column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "ClassId",
                         onDelete: ReferentialAction.Cascade);
@@ -75,22 +75,21 @@ namespace Labb2_Linq.Migrations
                 name: "TeacherCourses",
                 columns: table => new
                 {
-                    FkTeacherId = table.Column<int>(type: "int", nullable: false),
-                    FkCourseId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherCourses", x => new { x.FkTeacherId, x.FkCourseId });
+                    table.PrimaryKey("PK_TeacherCourses", x => new { x.TeacherId, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_TeacherCourses_Courses_FkCourseId",
-                        column: x => x.FkCourseId,
+                        name: "FK_TeacherCourses_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherCourses_Teachers_FkTeacherId",
-                        column: x => x.FkTeacherId,
+                        name: "FK_TeacherCourses_Teachers_TeacherId",
+                        column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "TeacherId",
                         onDelete: ReferentialAction.Cascade);
@@ -100,40 +99,40 @@ namespace Labb2_Linq.Migrations
                 name: "StudentCourses",
                 columns: table => new
                 {
-                    FkStudentId = table.Column<int>(type: "int", nullable: false),
-                    FkCourseId = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentCourses", x => new { x.FkStudentId, x.FkCourseId });
+                    table.PrimaryKey("PK_StudentCourses", x => new { x.StudentId, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_StudentCourses_Courses_FkCourseId",
-                        column: x => x.FkCourseId,
+                        name: "FK_StudentCourses_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentCourses_Students_FkStudentId",
-                        column: x => x.FkStudentId,
+                        name: "FK_StudentCourses_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentCourses_FkCourseId",
+                name: "IX_StudentCourses_CourseId",
                 table: "StudentCourses",
-                column: "FkCourseId");
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_FkClassId",
+                name: "IX_Students_ClassId",
                 table: "Students",
-                column: "FkClassId");
+                column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherCourses_FkCourseId",
+                name: "IX_TeacherCourses_CourseId",
                 table: "TeacherCourses",
-                column: "FkCourseId");
+                column: "CourseId");
         }
 
         /// <inheritdoc />

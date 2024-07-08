@@ -20,9 +20,17 @@ namespace Labb2_Linq.Controllers
         }
 
         // GET: Courses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.Courses.ToListAsync());
+            var course = await _context.Courses
+                .Include(c => c.TeacherCourses)
+                .ThenInclude(tc => tc.Teacher)
+                .Include(c => c.StudentCourses)
+                .ThenInclude(sc => sc.Student)
+                .ThenInclude(s => s.Class)
+                .ToListAsync();
+
+            return View(course);
         }
 
         // GET: Courses/Details/5
@@ -34,7 +42,12 @@ namespace Labb2_Linq.Controllers
             }
 
             var course = await _context.Courses
+                .Include(c => c.TeacherCourses)
+                .ThenInclude(tc => tc.Teacher)
+                .Include(c => c.StudentCourses)
+                .ThenInclude(sc => sc.Student)
                 .FirstOrDefaultAsync(m => m.CourseId == id);
+
             if (course == null)
             {
                 return NotFound();

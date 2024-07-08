@@ -1,36 +1,44 @@
 ﻿@model Labb2_Linq.Models.Student
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Redigera Student";
 }
 
-<h1>Edit</h1>
+<h1 class="mb-4">Redigera Student</h1>
 
-<h4>Student</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row justify-content-start">
+    <div class="col-md-6">
+        <h4>Studentinformation</h4>
+        <hr />
+        <h6>Förnamn: </h6><h6 class="text-black-50">@Html.DisplayFor(model => model.StudentFirstName)</h6>
+        <h6>Efternamn: </h6><h6 class="text-black-50">@Html.DisplayFor(model => model.StudentLastName)</h6>
+        <h6>Klass: </h6><h6 class="text-black-50">@Html.DisplayFor(model => model.Class.ClassName)</h6>
+        <h4 class="mt-5">Uppdatera information</h4>
+        <hr />
+        <form asp-action="Edit" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <input type="hidden" asp-for="StudentId" />
-            <div class="form-group">
-                <label asp-for="StudentFirstName" class="control-label"></label>
+
+            <div class="mb-3">
+                <label asp-for="StudentFirstName" class="form-label"></label>
                 <input asp-for="StudentFirstName" class="form-control" />
                 <span asp-validation-for="StudentFirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="StudentLastName" class="control-label"></label>
+
+            <div class="mb-3">
+                <label asp-for="StudentLastName" class="form-label"></label>
                 <input asp-for="StudentLastName" class="form-control" />
                 <span asp-validation-for="StudentLastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <input type="submit" value="Spara" class="btn btn-outline-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div class="mt-md-5">
+<div class="mt-5">
     <a class="text-decoration-none text-black-50" asp-action="Index">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />

@@ -20,13 +20,11 @@ namespace Labb2_Linq.Controllers
         }
 
         // GET: Teachers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
             var techers = await _context.Teachers
                 .Include(t => t.TeacherCourses)
-                    .ThenInclude(tc => tc.Course)
-                        .ThenInclude(c => c.StudentCourses)
-                            .ThenInclude(sc => sc.Student)
+                .ThenInclude(tc => tc.Course)
                 .ToListAsync();
 
             return View(techers);
@@ -93,11 +91,9 @@ namespace Labb2_Linq.Controllers
         }
 
         // POST: Teachers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TeacherId,TeacherFirstName")] Teacher teacher)
+        public async Task<IActionResult> Edit(int id, [Bind("TeacherId,TeacherFirstName,TeacherLastName,TeacherCourses")] Teacher teacher)
         {
             if (id != teacher.TeacherId)
             {
@@ -126,6 +122,7 @@ namespace Labb2_Linq.Controllers
             }
             return View(teacher);
         }
+
 
         // GET: Teachers/Delete/5
         public async Task<IActionResult> Delete(int? id)

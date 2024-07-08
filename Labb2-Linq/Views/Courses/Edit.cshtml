@@ -1,25 +1,30 @@
 ﻿@model Labb2_Linq.Models.Course
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Redigera Kurs";
 }
 
-<h1>Edit</h1>
-
-<h4>Course</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<h1>Redigera Kurs</h1>
+<div class="row justify-content-start">
+    <div class="col-md-6">
+        <h4>Kursinformation</h4>
+        <hr />
+        <h6>Förnamn: </h6>
+        <h6 class="text-black-50">@Html.DisplayFor(model => model.CourseName)</h6>
+        <h4 class="mt-5">Uppdatera information</h4>
+        <hr />
+        <form asp-action="Edit" class="mt-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CourseId" />
-            <div class="form-group">
+
+            <div class="mb-3">
                 <label asp-for="CourseName" class="control-label"></label>
                 <input asp-for="CourseName" class="form-control" />
                 <span asp-validation-for="CourseName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <input type="submit" value="Spara" class="btn btn-outline-primary" />
             </div>
         </form>
     </div>
@@ -35,5 +40,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
