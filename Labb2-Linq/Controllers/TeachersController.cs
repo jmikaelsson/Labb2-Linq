@@ -120,7 +120,9 @@ namespace Labb2_Linq.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ModelState.AddModelError(string.Empty, "Model.State is not valid!");
             return View(teacher);
+
         }
 
 

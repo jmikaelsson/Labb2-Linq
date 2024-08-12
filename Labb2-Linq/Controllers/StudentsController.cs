@@ -81,15 +81,9 @@ namespace Labb2_Linq.Controllers
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentFirstName,StudentLastName,ClassId")] Student student)
+        public async Task<IActionResult> Edit(Student student)
         {
-            if (id != student.StudentId)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     _context.Update(student);
@@ -99,19 +93,19 @@ namespace Labb2_Linq.Controllers
                 {
                     if (!StudentExists(student.StudentId))
                     {
+                        ModelState.AddModelError(string.Empty, "Model.State is not valid!");
                         return NotFound();
                     }
                     else
                     {
                         throw;
                     }
+                
                 }
 
                 return RedirectToAction(nameof(Index));
-            }
 
-            ViewData["id"] = new SelectList(_context.Classes, "ClassId", "ClassName", student.ClassId);
-            return View(student);
+            
         }
 
         // GET: Students/Delete/5

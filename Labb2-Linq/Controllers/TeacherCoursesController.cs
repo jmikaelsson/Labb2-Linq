@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Labb2_Linq.Data;
 using Labb2_Linq.Models;
+using NuGet.DependencyResolver;
 
 namespace Labb2_Linq.Controllers
 {
@@ -51,56 +52,83 @@ namespace Labb2_Linq.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int teacherId, int courseId)
         {
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.TeacherId == teacherId);
+            var course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == courseId);
+
             if (teacherId == 0 || courseId == 0)
             {
                 return NotFound();
             }
 
-            var teacherCourse = await _context.TeacherCourses.FindAsync(teacherId, courseId);
+            var teacherCourse = await _context.TeacherCourses
+                .Include(tc => tc.Teacher)
+                .Include(tc => tc.Course)
+                .FirstOrDefaultAsync(tc => tc.CourseId == courseId && tc.TeacherId == teacherId);
+
             if (teacherCourse == null)
             {
                 return NotFound();
             }
 
+            SelectNewTeacherCourseVM viewModel = new()
+            {
+                Course = course,
+                TeacherId = teacher.TeacherId,
+                Teacher = teacher,
+                NewTeacherList = new SelectList(_context.Teachers
+                .Where(t => !_context.TeacherCourses.Any(tc => tc.CourseId == courseId && tc.TeacherId == t.TeacherId))
+                .ToList(), "Id", "Name")
+            };
             ViewData["CourseId"] = new SelectList(_context.Courses, "CourseId", "CourseName", teacherCourse.CourseId);
             ViewData["TeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherFirstName", teacherCourse.TeacherId);
-            return View(teacherCourse);
+            return View(viewModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int teacherId, int courseId, [Bind("TeacherId,CourseId")] TeacherCourse teacherCourse)
+        public async Task<IActionResult> Edit(int courseId, int teacherId, int newTeacherId)
         {
-            if (teacherId != teacherCourse.TeacherId || courseId != teacherCourse.CourseId)
+            var existingTeacherCourse = _context.TeacherCourses
+                    .Where(tc => tc.TeacherId == teacherId && tc.CourseId == courseId)
+                    .FirstOrDefault();
+
+            var newTeacher = _context.Teachers.FirstOrDefault(t => t.TeacherId == newTeacherId);
+
+            if (existingTeacherCourse == null || newTeacher == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                _context.TeacherCourses.Remove(existingTeacherCourse);
+                await _context.SaveChangesAsync();
+
+                TeacherCourse newTeacherCourse = new()
                 {
-                    _context.Update(teacherCourse);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                    TeacherId = newTeacherId,
+                    CourseId = courseId
+                };
+                _context.TeacherCourses.Add(newTeacherCourse);
+                await _context.SaveChangesAsync();
+            }
+               
+               
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TeacherCourseExists(existingTeacherCourse.TeacherId, existingTeacherCourse.CourseId))
                 {
-                    if (!TeacherCourseExists(teacherCourse.TeacherId, teacherCourse.CourseId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    throw;
+                }
             }
 
-            ViewData["CourseId"] = new SelectList(_context.Courses, "CourseId", "CourseName", teacherCourse.CourseId);
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherFirstName", teacherCourse.TeacherId);
-            return View(teacherCourse);
+           return RedirectToAction("Index", "Courses");
+            
         }
 
 
@@ -142,8 +170,8 @@ namespace Labb2_Linq.Controllers
 
         private bool TeacherCourseExists(int teacherId, int courseId)
         {
-            return _context.TeacherCourses.Any(e => e.TeacherId == teacherId && e.CourseId == courseId);
+            return _context.TeacherCourses.Any(tc => tc.TeacherId == teacherId && tc.CourseId == courseId);
         }
 
-    }
+}
 }

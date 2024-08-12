@@ -17,6 +17,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TeacherId" />
 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TeacherCourses" />
+
             <div class="mb-3">
                 <label asp-for="TeacherFirstName" class="control-label"></label>
                 <input asp-for="TeacherFirstName" class="form-control" />
@@ -28,6 +31,7 @@
                 <input asp-for="TeacherLastName" class="form-control" />
                 <span asp-validation-for="TeacherLastName" class="text-danger"></span>
             </div>
+
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                 <input type="submit" value="Spara" class="btn btn-primary" />

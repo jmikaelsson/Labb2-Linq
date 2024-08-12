@@ -19,6 +19,12 @@
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <input type="hidden" asp-for="StudentId" />
 
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="ClassId" />
+
+           <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="Class" />
+
             <div class="mb-3">
                 <label asp-for="StudentFirstName" class="form-label"></label>
                 <input asp-for="StudentFirstName" class="form-control" />
@@ -30,6 +36,8 @@
                 <input asp-for="StudentLastName" class="form-control" />
                 <span asp-validation-for="StudentLastName" class="text-danger"></span>
             </div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="StudentCourses" />
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                 <input type="submit" value="Spara" class="btn btn-outline-primary" />
